@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "我的学习笔记",
   description: "记录学习与成长的技术博客",
+  base: '/MyLearningBlog/',
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
