@@ -1,79 +1,69 @@
-# 学习笔记博客 - 维护指南
+# My Learning Blog 📚
 
-欢迎来到你的个人知识库！这是一个基于 [VitePress](https://vitepress.dev/) 构建的静态网站。
-这份指南将帮助你轻松管理和更新你的博客内容。
+欢迎来到我的个人知识花园！这是一个基于 **VitePress** 构建，并集成 **TinaCMS** 实现可视化管理的现代化技术博客。
 
-## 🚀 快速开始
-
-### 1. 启动本地预览
-在开始写作前，先启动本地服务器，这样可以实时看到修改效果。
-打开终端（命令行），在项目根目录下运行：
-
-```bash
-npm run docs:dev
-```
-
-启动后，访问终端显示的地址（通常是 http://localhost:5173/）。
-> **提示**：修改内容后保存文件，浏览器通过热更新自动刷新，无需重启命令。
+🔗 **访问地址**: [https://vivacious1024.github.io/MyLearningBlog/](https://vivacious1024.github.io/MyLearningBlog/)
 
 ---
 
-## ✍️ 如何添加新内容
+## 🚀 项目亮点
 
-整个网站的内容都存放在 `docs` 目录下。
+- **极速体验**: 基于 VitePress 构建，秒级加载，SEO 友好。
+- **所见即所得**: 集成了 TinaCMS，支持在网页端直接编辑内容并管理图片。
+- **自动化部署**: 通过 GitHub Actions 实现 `git push` 即发布。
+- **现代化架构**: 采用 "文件即路由" 的设计理念，结构清晰。
 
-### 步骤 1：创建文章
-1. 找到内容存放目录 `docs/notes/`（你也可以在这里创建新的文件夹分类）。
-2. 新建一个 `.md` (Markdown) 文件，例如在 `docs/notes/python/` 下新建 `web-scraping.md`。
-3. 使用 Markdown 语法编写内容。
+## 🛠️ 技术栈
 
-**示例文件内容：**
-```markdown
-# Python 爬虫实战
+- **框架**: [VitePress](https://vitepress.dev/) (Vue 3 + Vite)
+- **CMS**: [TinaCMS](https://tina.io/) (Git-backed Headless CMS)
+- **部署**: GitHub Pages + GitHub Actions
+- **开发语言**: Markdown, TypeScript, Vue
 
-这里是正文内容...
+## 💻 本地开发指南
+
+如果你想在本地运行这个项目：
+
+1.  **克隆仓库**
+    ```bash
+    git clone https://github.com/vivacious1024/MyLearningBlog.git
+    cd MyLearningBlog
+    ```
+
+2.  **安装依赖**
+    ```bash
+    npm install
+    ```
+
+3.  **启动开发服务器**
+    ```bash
+    npm run dev
+    ```
+    - 博客预览: `http://localhost:5173`
+    - CMS 后台: `http://localhost:5173/admin/index.html`
+
+4.  **构建与预览生产环境**
+    ```bash
+    npm run docs:build
+    npm run docs:preview
+    ```
+
+## 📝 目录结构
+
+```
+.
+├── .github/workflows/    # 自动化部署脚本
+├── docs/                 # 内容源文件 (Markdown)
+│   ├── .vitepress/       # 网站配置文件 (Review UI)
+│   ├── notes/            # 学习笔记 (Python, Web等)
+│   └── public/           # 静态资源 (图片等)
+├── tina/                 # CMS 配置文件 (Schema)
+└── package.json
 ```
 
-### 步骤 2：更新侧边栏菜单
-新文件创建后，默认不会自动出现在左侧菜单中，你需要手动告诉网站它的位置。
+## 🤝 贡献
 
-1. 打开配置文件：`docs/.vitepress/config.mjs`
-2. 找到 `sidebar` 配置项。
-3. 在对应的分类下添加新文件的链接。
-
-```javascript
-// 示例修改：在 items 数组中添加新的一行
-items: [
-  { text: '基础语法', link: '/notes/python/basics' },
-  // 格式：{ text: '菜单显示的名称', link: '/文件夹/文件名(不带.md)' }
-  { text: '爬虫实战', link: '/notes/python/web-scraping' }
-]
-```
+欢迎提交 Issue 或 Pull Request 来改进这个博客！
 
 ---
-
-## 🛠️ 项目结构说明
-
-```text
-f:/博客/
-├── docs/                # 【核心目录】所有文章都在这里
-│   ├── index.md         # 网站主页（封面）配置
-│   ├── .vitepress/      # 系统配置目录
-│   │   └── config.mjs   # 【核心配置文件】修改菜单、标题、导航栏
-│   └── notes/           # 笔记存放目录（你可以随意新建文件夹分类）
-│       ├── python/
-│       └── ...
-├── package.json         # 项目依赖配置
-└── README.md            # 本说明文件
-```
-
-## 📦 常用命令
-
-- **`npm run docs:dev`**  
-  启动本地开发服务器（写作时一直开着这个）。
-
-- **`npm run docs:build`**  
-  构建最终的静态网站文件（用于发布），生成的文件在 `docs/.vitepress/dist`。
-
-- **`npm run docs:preview`**  
-  预览构建后的结果（检查发布前的最终效果）。
+*Created with ❤️ by vivacious1024*
