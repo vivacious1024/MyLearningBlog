@@ -23,6 +23,7 @@ export default defineConfig({
             { text: '实战：从零搭建 VitePress', link: '/notes/web/vitepress-setup-guide' },
             { text: '实战：发布到 GitHub Pages', link: '/notes/web/github-pages-deploy' },
             { text: '附：Git 代理设置指南', link: '/notes/web/git-proxy-guide' },
+            { text: '附：GitHub 仓库安全吗？', link: '/notes/web/github-security-guide' },
             { text: '更新与部署', link: '/notes/web/static-site-workflow' },
             { text: '网站的路由与结构', link: '/notes/web/structure-and-routing' },
             { text: 'UI 定制指南', link: '/notes/web/ui-customization' },
