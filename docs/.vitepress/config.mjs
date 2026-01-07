@@ -24,6 +24,8 @@ export default defineConfig({
             { text: '实战：发布到 GitHub Pages', link: '/notes/web/github-pages-deploy' },
             { text: '附：Git 代理设置指南', link: '/notes/web/git-proxy-guide' },
             { text: '附：GitHub 仓库安全吗？', link: '/notes/web/github-security-guide' },
+            { text: '实战：如何安全地接入AI', link: '/notes/web/ai-api-security.md' },
+            { text: '附：Cloudflare Workers 入门', link: '/notes/web/cloudflare-workers-guide' },
             { text: '更新与部署', link: '/notes/web/static-site-workflow' },
             { text: '网站的路由与结构', link: '/notes/web/structure-and-routing' },
             { text: 'UI 定制指南', link: '/notes/web/ui-customization' },
