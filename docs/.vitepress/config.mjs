@@ -59,6 +59,28 @@ export default defineConfig({
           ]
         },
         {
+          text: '小笔记',
+          collapsed: false,
+          items: [
+            { text: '“抽象”与“接口”', link: '/notes/tips/抽象与接口'},
+            { text: 'Android结合数据库', link: '/notes/tips/Android结合数据库'},
+            { text: 'gemini每次更新设置代理端口', link: '/notes/tips/gemini每次更新设置代理端口'},
+            { text: 'java自带打包指令', link: '/notes/tips/Java自带打包指令'},
+            { text: 'linux', link: '/notes/tips/linux'},
+            { text: 'markdown常用语法', link: '/notes/tips/markdown常用语法'},
+            { text: 'npm install', link: '/notes/tips/npm install' },
+            { text: 'vi编辑器', link: '/notes/tips/vi编辑器' },
+            { text: 'word快捷键', link: '/notes/tips/word快捷键' },
+            { text: 'ollama', link: '/notes/tips/ollama' },
+            { text: '应用缓存', link: '/notes/tips/应用缓存' },
+            { text: '学习妙妙小工具', link: '/notes/tips/学习妙妙小工具' },
+            { text: '安装deb文件', link: '/notes/tips/安装deb文件' },
+            { text: '手机快捷键', link: '/notes/tips/手机快捷键' },
+            { text: '输入文本框的使用', link: '/notes/tips/输入文本框的使用' },
+            { text: '电脑快捷键', link: '/notes/tips/电脑快捷键' },
+          ]
+        },
+        {
           text: '关于',
           collapsed: true,
           items: [

@@ -1,0 +1,1 @@
+ollama create <evironment> -f <file.txt>

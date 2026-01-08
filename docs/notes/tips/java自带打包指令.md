@@ -1,0 +1,1 @@
+jpackage --name aEva25 --type exe --input E:\test --main-jar autoEvaluation.jar --java-options "-Dserver.port=8888" --win-console --win-dir-chooser
