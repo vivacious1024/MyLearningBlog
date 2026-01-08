@@ -16,6 +16,13 @@ export default defineConfig({
       // 统一的【学习笔记】侧边栏
       '/notes/': [
         {
+          text: '算法',
+          collapsed: false,
+          items: [
+            { text: '260108：最大方阵和', link: '/notes/algorithm/260108-maximum-matrix-sum' },
+          ]
+        },
+        {
           text: 'Web 建站指南',
           collapsed: false,
           items: [
