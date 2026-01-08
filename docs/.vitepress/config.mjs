@@ -59,6 +59,15 @@ export default defineConfig({
           ]
         },
         {
+          text: '金融与量化交易',
+          collapsed: false,
+          items: [
+            { text: '金融市场基础', link: '/notes/quant/finance-basics' },
+            { text: '量化交易入门', link: '/notes/quant/quantitative-trading' },
+            { text: '高频交易详解', link: '/notes/quant/high-frequency-trading' }
+          ]
+        },
+        {
           text: '小笔记',
           collapsed: false,
           items: [
