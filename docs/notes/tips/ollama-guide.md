@@ -1,1 +1,1 @@
-ollama create <evironment> -f <file.txt>
+`ollama create <evironment> -f <file.txt>`
