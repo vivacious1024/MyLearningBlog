@@ -105,6 +105,37 @@ VitePress 使用 **CSS 变量**系统，所以改主题色非常简单，不需�
 }
 ```
 
+## 7. 添加扩展功能 (如：浏览量统计)
+
+有时候我们需要一些不那么"原生"的功能，比如文章阅读量统计。这里推荐一个极简的方案：**不蒜子 (Busuanzi)**。
+
+它是一个“两行代码”就能实现的统计服务，不需要后端，也就“不算子”（不蒜子）。
+
+**在 `config.mjs` 中配置：**
+
+1.  **注入脚本**：在 `head` 中加载不蒜子的 JS 文件。
+2.  **显示数据**：在 `nav` 或 `footer` 中添加特定的 HTML 标签（id 匹配即可）。
+
+```javascript
+export default defineConfig({
+  // ... 其他配置
+  head: [
+    // 引入不蒜子脚本
+    ['script', { async: '', src: '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js' }]
+  ],
+  themeConfig: {
+    // ...
+    footer: {
+      message: 'Released under the MIT License.',
+      // 在版权信息后添加统计
+      // busuanzi_container_site_pv: 总访问量容器
+      // busuanzi_value_site_pv: 具体的数值（会自动填充）
+      copyright: 'Copyright © 2024-present | <span id="busuanzi_container_site_pv" style="display:none">总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>'
+    }
+  }
+})
+```
+
 ## 总结
 
 -   **大框架**（导航、侧边栏、页脚）：在 `config.mjs` 改。

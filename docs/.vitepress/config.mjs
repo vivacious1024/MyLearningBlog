@@ -4,6 +4,9 @@ export default defineConfig({
   title: "我的学习笔记",
   description: "记录学习与成长的技术博客",
   base: '/MyLearningBlog/',
+  head: [
+    ['script', { async: '', src: '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js' }]
+  ],
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
@@ -113,7 +116,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2024-present'
+      copyright: 'Copyright © 2024-present | <span id="busuanzi_container_site_pv" style="display:none">总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>'
     }
   }
 })
