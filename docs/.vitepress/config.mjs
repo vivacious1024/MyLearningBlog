@@ -59,6 +59,13 @@ export default defineConfig({
           ]
         },
         {
+          text: 'LLM 学习笔记',
+          collapsed: false,
+          items: [
+            { text: 'HappyLLM打卡1：NLP的基本概念', link: '/notes/llm/happy1.md' }
+          ]
+        },
+        {
           text: '金融与量化交易',
           collapsed: false,
           items: [
