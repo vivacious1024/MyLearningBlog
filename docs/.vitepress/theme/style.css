@@ -1,0 +1,82 @@
+/* 自定义主题色：靛蓝/紫罗兰色系，更具科技感和高级感 */
+:root {
+  --vp-c-brand-1: #6366f1;
+  /* Indigo 500 */
+  --vp-c-brand-2: #818cf8;
+  /* Indigo 400 */
+  --vp-c-brand-3: #a5b4fc;
+  /* Indigo 300 */
+  --vp-c-brand-soft: rgba(99, 102, 241, 0.14);
+}
+
+/* 首页 Hero 图片动画：上下浮动 */
+.VPHomeHero .image-src {
+  animation: float 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Bento Grid 风格的 Features 区域 */
+.VPHomeFeatures .VPFeature {
+  border: 1px solid rgba(128, 128, 128, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+  /* 浅色模式下的半透明 */
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.dark .VPHomeFeatures .VPFeature {
+  background: rgba(30, 30, 40, 0.6);
+  /* 深色模式 */
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.VPHomeFeatures .VPFeature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+  border-color: var(--vp-c-brand-2);
+}
+
+/* 标题渐变增强 */
+.VPHomeHero .name {
+  background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 布局调整：防止内容重叠 */
+@media (min-width: 960px) {
+  .VPHomeHero {
+    padding-bottom: 40px !important;
+  }
+
+  .VPHomeHero .image-bg {
+    display: none;
+    /* 移除默认的背景光斑，减少视觉混乱 */
+  }
+
+  .VPHomeFeatures {
+    padding-top: 40px !important;
+  }
+
+  /* 稍微限制图片最大高度，防止在大屏下过于巨大 */
+  .VPHomeHero .image-src {
+    max-height: 450px;
+    object-fit: contain;
+  }
+}

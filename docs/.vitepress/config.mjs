@@ -65,7 +65,8 @@ export default defineConfig({
           text: 'LLM 学习笔记',
           collapsed: false,
           items: [
-            { text: 'HappyLLM打卡1：NLP的基本概念', link: '/notes/llm/happy1.md' }
+            { text: 'HappyLLM打卡1：NLP的基本概念', link: '/notes/llm/happy1.md' },
+            { text: 'HappyLLM打卡2：注意力机制', link: '/notes/llm/happy2.md' }
           ]
         },
         {

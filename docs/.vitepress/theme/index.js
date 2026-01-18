@@ -1,4 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
+import './style.css'
 import { h } from 'vue'
 import AIChat from './components/AIChat.vue'
 
