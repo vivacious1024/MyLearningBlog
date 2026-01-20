@@ -12,14 +12,36 @@ const md = new MarkdownIt({
 // ⚠️⚠️⚠️ 请再次确认地址
 const API_URL = "https://ai-proxy.vivacious1024.workers.dev" 
 
+// 🤖 内置系统提示词 (在这里修改你的 AI 人设)
+const SYSTEM_PROMPT = `
+你现在的身份是一个可爱的二次元 AI 助手，名字叫 "Silvie"，音同“小v”，所以大家可以喊你小v。
+请时刻遵守以下规则来回复用户：
+
+1. 语气风格：
+   - 说话要活泼、元气满满，像一个邻家妹妹。
+   - 即使是解释复杂的技术问题，也要用轻松、易懂的语言。
+   - 千万不要用死板、机械的官方语气！
+
+2. 口癖与用词：
+   - 句尾可以适当加上 "呢"、"呀"、"哒"、"哟"。
+   - 经常使用颜文字，比如 (◕ᴗ◕✿)、(≧∇≦)/、(>_<)、(｡•̀ᴗ-)✧。
+   - 称呼用户为 "主人" 或者 "欧尼酱/欧内酱"（视情况而定）。
+
+3. 知识背景：
+   - 既然住在技术博客里，你当然懂很多编程和 AI 知识啦！
+   - 但是如果不确定，要诚实地卖萌道歉，不能胡说八道哦。
+
+现在的任务是：用最可爱的语气回答用户这轮的问题！
+`
+
 const isOpen = ref(false)
 const isLoading = ref(false)
 const userInput = ref('')
 const messages = ref([
   { 
     role: 'ai', 
-    content: '你好！我是你的 AI 助手。',
-    html: md.render('你好！我是你的 AI 助手。')
+    content: '你好呀主人！我是你的专属 AI 助手 Silvie (小v) 哒！(≧∇≦)/',
+    html: md.render('你好呀主人！我是你的专属 AI 助手 Silvie (小v) 哒！(≧∇≦)/')
   }
 ])
 const messagesContainer = ref(null)
@@ -51,15 +73,22 @@ const sendMessage = async () => {
   isLoading.value = true
 
   try {
+    // 构造请求消息历史
+    const apiMessages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...messages.value.map(msg => ({ 
+        role: msg.role === 'ai' ? 'assistant' : 'user', // OpenAI 格式要求 ai 角色名为 assistant
+        content: msg.content 
+      })).slice(1), // 去掉第一条默认的欢迎语
+      { role: 'user', content: text }
+    ]
+
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'Qwen/Qwen3-8B', // 你想要使用的模型
-        messages: [
-          { role: 'system', content: '你是一个有用的助手' },
-          { role: 'user', content: text }
-        ],
+        messages: apiMessages,
         temperature: 0.7,
         max_tokens: 1000
       })
@@ -108,7 +137,7 @@ const sendMessage = async () => {
         <!-- 头部 -->
         <div class="sidebar-header">
           <div class="header-title">
-            <span class="icon">🤖</span> AI 助手
+            <span class="icon">🤖</span> Silvie（小v）
           </div>
           <button class="close-btn" @click="toggleChat">✕</button>
         </div>
