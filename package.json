@@ -16,6 +16,7 @@
     "@tinacms/cli": "^2.0.6",
     "@types/node": "^25.0.3",
     "markdown-it": "^14.1.0",
+    "markdown-it-mathjax3": "^4.3.2",
     "vitepress": "^1.6.4"
   },
   "dependencies": {

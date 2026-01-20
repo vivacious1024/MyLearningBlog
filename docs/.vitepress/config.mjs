@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitepress'
+import mathjax3 from 'markdown-it-mathjax3'
 
 export default defineConfig({
+  markdown: {
+    config: (md) => {
+      md.use(mathjax3)
+    }
+  },
   title: "我的学习笔记",
   description: "记录学习与成长的技术博客",
   base: '/MyLearningBlog/',
@@ -23,6 +29,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: '260108：最大方阵和', link: '/notes/algorithm/260108-maximum-matrix-sum' },
+            { text: '260120：构造最小位运算数组', link: '/notes/algorithm/260120-Constructing_a_Bitwise_Operation_Array' },
           ]
         },
         {
