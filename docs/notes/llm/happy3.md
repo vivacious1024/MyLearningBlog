@@ -227,4 +227,4 @@ class Decoder(nn.Module):
 
 完成上述 Encoder、Decoder 的搭建，就完成了 Transformer 的核心部分，接下来将 Encoder、Decoder 拼接起来再加入 Embedding 层就可以搭建出完整的 Transformer 模型啦。
 
-原文描述详细又有理，所以今天的内容更像是摘抄，不过我仍然会做一个小的思维导图放上来：
+原文描述详细又有理，所以今天的内容更像是摘抄。

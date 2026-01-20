@@ -73,7 +73,8 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: 'HappyLLM打卡1：NLP的基本概念', link: '/notes/llm/happy1.md' },
-            { text: 'HappyLLM打卡2：注意力机制', link: '/notes/llm/happy2.md' }
+            { text: 'HappyLLM打卡2：注意力机制', link: '/notes/llm/happy2.md' },
+            { text: 'HappyLLM打卡3：编码器与解码器', link: '/notes/llm/happy3.md' }
           ]
         },
         {
