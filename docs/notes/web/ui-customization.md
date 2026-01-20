@@ -136,6 +136,16 @@ export default defineConfig({
 })
 ```
 
+## 8. 附录：AI 绘图提示词 (Prompt) 记录
+
+如果你也想生成类似的可爱风格图片，可以使用以下提示词（English Prompt）：
+
+**1. 首页 Hero 圆滚滚团子风格 (Chibi Doodle):**
+> A super cute, abstract chibi doodle of Furina from Genshin Impact. Extremely minimalist and round style (bean/blob shape). Soft pastel colors (white, baby blue, soft navy). Simple facial features (dots for eyes or happy closed eyes). She is wearing a tiny simplified top hat. Floating playfully. Hand-drawn crayon or vector icon aesthetic. Low detail, emphasis on cuteness and shape. White background.
+
+**2. 之前的简笔动漫画风 (Simple Anime Cartoon):**
+> A cute, minimalist cartoon anime illustration of Furina from Genshin Impact. She has white hair with blue streaks, heterochromatic blue eyes, and wears her signature blue and white formal outfit with a small top hat. The style is simple line art with flat, vibrant colors (vector style). She is striking a confident yet playful pose. The background is pure white to blend seamlessly with a website interface. 4k resolution.
+
 ## 总结
 
 -   **大框架**（导航、侧边栏、页脚）：在 `config.mjs` 改。

@@ -80,3 +80,21 @@
     object-fit: contain;
   }
 }
+
+/* 萌系芙宁娜背景水印 */
+#app::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/MyLearningBlog/png/furina-chibi.png'); /* 注意 base 路径 */
+  background-repeat: no-repeat;
+  background-position: 85% 90%; /* 右下角，稍微靠内 */
+  background-size: 300px; /* 适中大小 */
+  opacity: 0.15; /* 低透明度，作为装饰 */
+  pointer-events: none;
+  mix-blend-mode: multiply; /* 正片叠底，去白底 */
+}
