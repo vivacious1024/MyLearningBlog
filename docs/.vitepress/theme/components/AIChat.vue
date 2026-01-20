@@ -55,12 +55,25 @@ const sendMessage = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: text }] }]
+        model: 'Qwen/Qwen3-8B', // 你想要使用的模型
+        messages: [
+          { role: 'system', content: '你是一个有用的助手' },
+          { role: 'user', content: text }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000
       })
     })
 
     const data = await response.json()
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我没有理解你的问题。"
+    console.log('AI API Response:', data) // 方便调试
+
+    if (data.error) {
+      throw new Error(data.error.message || 'API Error')
+    }
+
+    // 兼容 OpenAI/SiliconFlow 返回格式
+    const reply = data.choices?.[0]?.message?.content || "抱歉，我没有理解你的问题。"
     
     // 渲染 Markdown
     messages.value.push({ 
