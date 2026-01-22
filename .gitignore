@@ -7,6 +7,11 @@ temp.md
 .obsidian
 .idea
 .vscode
+*.suo
+*.ntvs
+*.njsproj
+*.sln
+*.sw?
 
 # Drawing files
 Excalidraw
@@ -14,10 +19,22 @@ Excalidraw
 # System files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Log files
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment Variables (Keep these secret!)
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel
 
 # Debug files
 waline
