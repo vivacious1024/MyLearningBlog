@@ -21,6 +21,4 @@ npm-debug.log*
 
 # Debug files
 waline
-debug-mongo.js
-clean-db.js
-resolve-srv.js
+111
