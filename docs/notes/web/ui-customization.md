@@ -92,16 +92,80 @@ features:
 # 这是一个标题 <Badge type="warning" text="Beta" />
 ```
 
-## 6. 自定义 CSS
+## 6. 进阶美化：自定义 CSS (视觉升级)
 
-如果默认的样式不能满足你（比如想换个主题色，或者把按钮改成圆角），你可以创建 `.vitepress/theme/index.css`。
+如果你想让网站看起来更“高级”，比如增加磨砂玻璃效果、更改背景色或美化侧边栏，你需要创建一个 `docs/.vitepress/theme/custom.css` 文件，并在 `index.js` 中引入它。
 
-VitePress 使用 **CSS 变量**系统，所以改主题色非常简单，不需要重写大量 CSS：
+### 6.1 全局背景与配色 (Skinning)
+
+我们可以通过覆盖 CSS 变量来改变整个网站的色调。
+
+**示例：更换为 Solarized Warm (米黄色) 风格**
 
 ```css
 :root {
-  --vp-c-brand-1: #646cff; /* 主色调 */
-  --vp-c-brand-2: #747bff; /* 浅一点的主色调 */
+  /* 品牌色（由于背景变黄，品牌色可以调深一点） */
+  --vp-c-brand-1: #268bd2;
+  --vp-c-brand-soft: rgba(38, 139, 210, 0.1);
+
+  /* 全局背景色：暖米色 */
+  --vp-c-bg: #fdf6e3; 
+  --vp-c-bg-alt: #eee8d5; /* 侧边栏/引用的背景 */
+}
+
+/* 暗黑模式适配 (Solarized Dark) */
+.dark {
+  --vp-c-bg: #002b36;
+  --vp-c-bg-alt: #073642;
+}
+```
+
+**示例：使用全屏背景图 + 磨砂覆盖**
+
+如果你想用一张精美的图片做背景，但又怕影响文字阅读，可以使用“背景层 + 内容层半透明”的方案：
+
+```css
+/* 1. 给 body 加背景图 */
+body {
+  background-image: url("/bg-texture.png"); /* 你的图片路径 */
+  background-size: cover;
+  background-attachment: fixed; /* 背景固定，不随滚动移动 */
+}
+
+/* 2. 让内容区域变半透明 (实现透视效果) */
+.VPContent, .VPFooter {
+  background-color: rgba(255, 255, 255, 0.8); /* 白色半透明 */
+  backdrop-filter: blur(10px); /* 磨砂效果 */
+}
+```
+
+### 6.2 侧边栏深度美化 (Glassmorphism)
+
+默认的侧边栏比较简单。我们可以通过 CSS 把它改造成现代 App 常见的“磨砂玻璃”风格，并优化选中态。
+
+**推荐配置 (custom.css)：**
+
+```css
+/* 侧边栏：磨砂玻璃 */
+.VPLocalNav, .VPSidebar {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+/* 选中文章：果冻块高亮 */
+.VPSidebarItem .link.active .text {
+  background-color: var(--vp-c-brand-soft); /* 浅色背景块 */
+  color: var(--vp-c-brand-1);               /* 深色文字 */
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+/* 鼠标悬停：轻微位移 */
+.VPSidebarItem .link:hover .text {
+  background-color: var(--vp-c-bg-soft);
+  transform: translateX(3px); /* 向右动一点 */
 }
 ```
 
@@ -138,7 +202,7 @@ export default defineConfig({
 
 ## 8. 附录：AI 绘图提示词 (Prompt) 记录
 
-如果你也想生成类似的可爱风格图片，可以使用以下提示词（English Prompt）：
+如果你你也想生成类似的可爱风格图片，可以使用以下提示词（English Prompt）：
 
 **1. 首页 Hero 圆滚滚团子风格 (Chibi Doodle):**
 > A super cute, abstract chibi doodle of Furina from Genshin Impact. Extremely minimalist and round style (bean/blob shape). Soft pastel colors (white, baby blue, soft navy). Simple facial features (dots for eyes or happy closed eyes). She is wearing a tiny simplified top hat. Floating playfully. Hand-drawn crayon or vector icon aesthetic. Low detail, emphasis on cuteness and shape. White background.

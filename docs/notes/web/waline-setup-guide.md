@@ -1,157 +1,231 @@
-# 实战：为 VitePress 接入 Waline 评论系统 (MongoDB 版)
+# 实战：为 VitePress 接入 Waline 评论系统 (MongoDB + Vercel 终极避坑指南)
 
-Waline 是一款功能强大的评论系统，我们将采用 **Vercel (服务端) + MongoDB Atlas (数据库)** 的组合。这是一个非常经典且稳健的**免费**架构。
+Waline 是一款功能强大的评论系统。本教程将带你采用 **Vercel (服务端) + MongoDB Atlas (数据库)** 的免费架构进行部署。
 
-## 核心概念：服务器 vs 数据库
-
-在开始之前，理解这两个角色的分工有助于您明白我们在做什么：
-
-*   **服务器 (Server)**：由 **Vercel** 扮演。
-    *   它像一个**“管家”**。负责接收网页发来的评论请求、过滤垃圾信息、发送邮件通知等逻辑处理。它只处理计算，不负责永久存储。
-*   **数据库 (Database)**：由 **MongoDB Atlas** 扮演。
-    *   它像一个**“仓库”**。它只负责存放每一条评论的数据。不管服务端重启多少次，只要数据库在，数据就在。
+> ⚠️ **前言 (2026年1月更新)**：
+> Waline 最新版 (V3) 在 Vercel 上配合 MongoDB Atlas 使用时，对环境变量配置有**非常严格且特殊的要求**。
+> 直接填一个 `MONGO_URI` 连接串在最新版中会导致超时或无法连接。**请务必严格按照本教程的“拆分变量法”进行配置。**
 
 ---
 
-## 第一步：创建此数据库 (MongoDB Atlas)
+## 🛠️ 第一步：准备数据库 (MongoDB Atlas)
 
-我们需要先准备好“仓库”。
+1. **注册与创建**：
 
-1.  访问 [MongoDB Atlas 官网](https://www.mongodb.com/cloud/atlas/register) 并注册账号（推荐直接用 Google 账号登录）。
-2.  **创建集群 (Cluster)**：
-    *   中间可能会有几个问卷，随便选。
-    *   看到价格页面时，务必选择右侧的 **"M0" (Free Forever / 永久免费)** 套餐。
-    *   **Provider**: 选 AWS。
-    *   **Region**: 选一个离您或者您大部分读者近的地方（比如 Singapore 或 Tokyo，如果没有就选 N. Virginia）。
-    *   点击底部绿色的 **"Create"** 按钮。
-3.  **创建数据库用户 (Security Quickstart)**：
-    *   **Username**: 填一个名字，比如 `admin`。
-    *   **Password**: [自动生成] 或者自己设一个复杂的。**👉 务必把这个密码复制下来记在记事本上！**
-    *   点击 **"Create User"**。
-4.  **设置网络访问 (Network Access)**：
-    *   ![](./images/mongodb-network-access.png)
-    *   **关于这里的选择**：如果您看到的界面是 "My Local Environment" 和 "Cloud Environment" 二选一：
-        *   **请不要**点击复杂的 Cloud Environment (VPC Peering)。
-        *   直接在下面的 IP Address 列表里，点击 **"Allow Access from Anywhere"** 按钮。
-        *   或者手动输入 IP 地址：`0.0.0.0/0`。
-    *   在 "Where would you like to connect from?" 下面。
-    *   选择 **"Allow Access from Anywhere"** (也就是 0.0.0.0/0)。*这也是为了让 Vercel 能连上它。*
-    *   点击 **"Finish and Close"**。
-5.  **获取连接字符串 (Connection String)**：
-    *   ![](./images/mongodb2.png)
-    *   等待集群创建完毕（变为绿色具体的各种指标图表）。
-    *   点击界面上的 **"Connect"** 按钮。
-    *   选择 **"Drivers"**。
-    *   您会看到一串代码，类似：`mongodb+srv://admin:<db_password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
-    *   **👉 复制这串代码**。
-    *   手动把代码里的 `<db_password>` 替换成刚才步骤 3 里记下的**真实密码**。
-    *   **这就是您的 `MONGO_URI`，请保管好！**
+   * 访问 [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)，注册并创建一个 **M0 (Free Forever)** 集群。
+   * Provider 选 AWS，Region 选离你近的（如 Singapore 或 Tokyo，或者默认 N. Virginia）。
+2. **创建数据库用户** (重要！)：
+
+   * 在左侧菜单 **Database Access** -> **Add New Database User**。
+   * 用户名：例如 `vivacious1024`。
+   * 密码：设置一个简单的密码（避免特殊字符），**记下来！**
+   * 权限：Read and write to any database。
+3. **设置网络白名单** (至关重要！)：
+
+   * 在左侧菜单 **Network Access** -> **Add IP Address**。
+   * **必须**选择 **Allow Access from Anywhere** (IP 地址为 `0.0.0.0/0`)。
+   * *原因：Vercel 的服务器 IP 是动态的，必须全开白名单才能连上。*
+4. **获取连接信息**：
+
+   * 点击 **Database** -> **Connect** -> **Drivers**。
+   * 复制那个 `mongodb+srv://...` 的连接串，我们后面要用脚本解析它。
 
 ---
 
-## 第二步：部署服务端 (Vercel) —— 纯净手动方案
+## 🚀 第二步：部署服务端 (Vercel)
 
-由于 Waline 官方仓库结构复杂，直接 Fork 容易导致 Vercel 配置错误（如 pnpm 锁文件冲突、根目录设置错误等）。
-我们推荐最稳妥的**“手动建仓库”**方案，**零冲突，一次成功**。
+我们采用“纯净手动模式”部署，避免官方一键部署可能带来的锁文件冲突。
 
-### 2.1 在 GitHub 创建新仓库
-1.  登录 GitHub，点击右上角 `+` -> **New repository**。
-2.  起个名字，比如 `my-waline`。
-3.  点击 **Create repository**。
+### 2.1 准备 GitHub 仓库
 
-### 2.2 创建核心文件 (共3个)
-我们需要手动创建3个文件，直接在网页上操作点击 **Add file** -> **Create new file** 即可。
+1. 在 GitHub 新建一个仓库，例如 `my-waline`。
+2. 创建 `package.json`：
+   ```json
+   {
+     "name": "waline-service",
+     "scripts": {
+       "start": "node api/index.js"
+     },
+     "dependencies": {
+       "@waline/vercel": "latest"
+     }
+   }
+   ```
+3. 创建 `api/index.js` (注意路径)：
+   ```javascript
+   const Application = require('@waline/vercel');
 
-**文件1：`package.json`** (放在根目录)
-这是告诉 Vercel 我们需要安装什么依赖。
-```json
-{
-  "dependencies": {
-    "@waline/vercel": "latest",
-    "waline": "latest"
-  }
-}
-```
+   module.exports = Application({
+     env: 'vercel',
+     app: 'app',
+   });
+   ```
+4. 创建 `vercel.json`：
+   ```json
+   {
+     "version": 2,
+     "rewrites": [ { "source": "/(.*)", "destination": "/api/index.js" } ]
+   }
+   ```
 
-**文件2：`vercel.json`** (放在根目录)
-这是告诉 Vercel 把所有请求都转发给代码处理。
-```json
-{
-  "version": 2,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index.js" }
-  ]
-}
-```
+   *将这三个文件提交到 GitHub 仓库。*
 
-**文件3：`api/index.js`** (注意输入文件名时带上 api/ 前缀)
-这是真正的程序入口。
+### 2.2 解析 MongoDB SRV 地址 (关键步骤！) 🔥
+
+Waline V3 在 Vercel 上**不支持**直接识别 `mongodb+srv://` 协议，会导致连接超时。我们需要把 Atlas 的 SRV 地址解析成真实的主机列表。
+
+**工具脚本：获取配置信息**
+在本地创建一个文件 `tool-resolve-srv.js`，填入代码：
+
 ```javascript
-/* eslint-disable @typescript-eslint/no-var-requires */
-const Application = require('@waline/vercel');
+const dns = require('dns');
+// 👇 将此处替换为你的 MongoDB 连接串里 @ 后面的域名
+// 例如: mongodb+srv://user:pass@comments.xz1nooo.mongodb.net/...
+// 则 domain 填: '_mongodb._tcp.comments.xz1nooo.mongodb.net' (注意前面加 _mongodb._tcp.)
+const domain = '_mongodb._tcp.comments.xz1nooo.mongodb.net'; 
 
-module.exports = Application({
-  env: 'vercel',
-  app: 'app',
+console.log('正在解析 SRV...');
+dns.resolveSrv(domain, (err, addresses) => {
+    if (err) { console.error('失败:', err); return; }
+    console.log('✅ 请将以下内容填入 Vercel 环境变量:');
+    console.log(`MONGO_HOST: ${JSON.stringify(addresses.map(a => a.name))}`);
+    console.log(`MONGO_PORT: ${JSON.stringify(addresses.map(a => a.port))}`);
 });
 ```
 
-### 2.3 在 Vercel 部署
-1.  访问 [Vercel 仪表盘](https://vercel.com/dashboard) -> **Add New...** -> **Project**。
-2.  导入刚才创建的 `my-waline` 仓库。
-3.  **Framework Preset**: 选 `Other`。
-4.  **Root Directory**: 保持默认 `./` (不要改)。
-5.  **Environment Variables**:
-    *   **Name**: `MONGO_URI`
-    *   **Value**: 填入第一步获得的 MongoDB 连接字符串。
-6.  点击 **Deploy**。
+运行它：`node tool-resolve-srv.js`。你将得到两个数组，类似于：
 
-### 2.4 验证
-部署完成后，点击 **Visit** 按钮。
-*   访问 `您的地址/ui` (例如 `https://xxx.vercel.app/ui`)。
-*   如果看到了登录/注册界面，说明服务端部署成功！
+* MONGO_HOST: `["ac-xxx-shard-00-00.xxx.net", ...]`
+* MONGO_PORT: `[27017, 27017, 27017]`
 
----
+### 2.3 配置 Vercel 环境变量 (Env Vars)
 
-## 第三步：前端接入 (更新代码)
+在 Vercel 导入项目后，进入 **Settings -> Environment Variables**，**逐个添加**以下变量（不要遗漏！）：
 
-1.  **安装依赖**：
-    ```bash
-    npm install @waline/client
-    ```
+| 变量名                     | 值 (示例)                        | 说明                                                                                                               |
+| :------------------------- | :------------------------------- | :----------------------------------------------------------------------------------------------------------------- |
+| **MONGO_HOST**       | `["host1.net","host2.net"...]` | **复制刚才脚本解析出的 JSON 数组**                                                                           |
+| **MONGO_PORT**       | `[27017,27017,27017]`          | **复制刚才脚本解析出的 JSON 数组**                                                                           |
+| **MONGO_DB**         | `waline`                       | 数据库名，自定义                                                                                                   |
+| **MONGO_USER**       | `vivacious1024`                | 步骤1创建的数据库用户名                                                                                            |
+| **MONGO_PASSWORD**   | `your_password`                | 数据库密码                                                                                                         |
+| **MONGO_AUTHSOURCE** | `admin`                        | 固定填 admin                                                                                                       |
+| **MONGO_REPLICASET** | `atlas-xxxx-shard-0`           | 副本集名字 (可选，如超时则必须填。可在 Atlas 连接串 `replicaSet=xxx` 参数找到，或用 `nslookup -type=TXT` 查询) |
+| **JWT_SECRET**       | `任意复杂字符串`               | **必须填**，用于加密登录态                                                                                   |
 
-2.  **配置组件**：
-    打开 `docs/.vitepress/theme/components/Comment.vue`，找到 `serverURL` 字段，将其修改为您刚才在 Vercel 获得的新地址。
+**⚠️ 注意：不要添加 `MONGO_URI` 或 `LEAN_ID` 等其他变量，以免干扰配置。**
 
-    ```javascript
-    walineInstance = init({
-        el: '#waline',
-        serverURL: 'https://您的-waline-地址.vercel.app', // <--- 修改这里
-        dark: 'html.dark',
-    });
-    ```
+![](./images/waline_variables.png)
+### 2.4 部署与验证
 
-3.  **重启本地服务**：
-    `npm run dev`，查看效果。
-    
-    如果成功的话，点击visit应该出现这样的画面:
-    ![](./images/waline-success.png)
+配置好变量后，点击 Vercel 的 **Redeploy**。
+部署完成后，访问 `https://你的域名.vercel.app/ui`。
+
+* **成功画面**：出现注册/登录框。第一个注册的人自动成为管理员。
+* **失败画面**：页面一直转圈，或出现 `500 Error`。请查看 Vercel Logs。
 
 ---
 
-## 常见问题
+## 💻 第三步：前端接入 (VitePress)
 
-*   **部署时报错 "Lockfile mismatch"？**
-    *   这是使用了官方仓库导致的。请改用上述的“纯净手动方案”，自己建仓库，不含锁文件，绝对不会报错。
-*   **访问 /ui 出现 404？**
-    *   说明 `vercel.json` 配置没生效。请确认您添加了上述教程中的 `vercel.json` 文件，并配置了 `rewrites`。
-*   **访问 /ui 出现 500 Error？**
-    *   这通常是数据库连接失败。
-    *   请检查 `MONGO_URI` 里的**密码**是否正确（不能包含 `< >`）。
-    *   请检查 MongoDB Atlas 的 **Network Access** 是否开启了 `0.0.0.0/0` (Allow Access from Anywhere)。
-*   **前端提示 CORS 跨域错误？**
-    *   这通常不是真的跨域问题，而是服务端挂了（返回 404 或 500 时，浏览器会报 CORS）。请优先解决服务端 /ui 无法访问的问题。
-*   **Waline 服务端和之前的 Cloudflare AI 是一样的吗？**
-    *   **不一样**。这是一个典型的**“混合云”**架构。
-    *   **Cloudflare Worker (AI)**：像个“传话筒”。它只负责转发请求给大模型，自己不存数据（无状态）。
-    *   **Vercel + MongoDB (Waline)**：像个“带仓库的管家”。**MongoDB** 负责永久存储评论数据，**Vercel** 负责处理逻辑。
+修改 `docs/.vitepress/theme/components/Comment.vue`：
+
+```javascript
+import { init } from '@waline/client';
+import '@waline/client/style';
+
+// ...
+onMounted(() => {
+  init({
+    el: '#waline',
+    // ⚠️ 替换为你部署好的 Vercel 地址
+    serverURL: 'https://my-blog-comment.vercel.app', 
+    dark: 'html.dark', 
+    // ...
+  });
+});
+```
+
+---
+
+## 🩺 故障排查与调试宝典 (Troubleshooting)
+
+如果在部署过程中遇到问题，请对照下表排查。这是基于实战踩坑总结的经验。
+
+### 1. 报错：`500 ResourceRequest timed out`
+
+* **现象**：访问接口一直 pending，最后报 500 超时。数据库连不上。
+* **原因 A**：IP 白名单没开。
+  * **解法**：去 MongoDB Atlas 确认 Network Access 里有 `0.0.0.0/0`。
+* **原因 B**：Waline V3 使用 SRV 协议失败。
+  * **解法**：**不要用 MONGO_URI**。必须按照本文 [2.3 节] 使用拆分的 `MONGO_HOST` (数组) + `MONGO_PORT` 方式配置。
+* **原因 C**：缺少 `MONGO_REPLICASET`。
+  * **解法**：如果是 `timed out` 且地址都对，尝试补上 `MONGO_REPLICASET` 变量。
+
+### 2. 报错：`500 Not initialized`
+
+* **现象**：连上了，但无法服务。Logs 里显示 `leancloud-storage ... Error`.
+* **原因**：Waline 没读到 MongoDB 配置，默认回退到了 LeanCloud 模式，但你又没填 LeanCloud 的 key。
+* **解法**：
+  1. 检查 `MONGO_DB` 变量是否设置（这是开启 Mongo 模式的开关）。
+  2. 删除所有 LeanCloud 相关变量（`LEAN_ID` 等）。
+  3. 添加 `JWT_SECRET` 变量。
+
+### 3. 报错：`phpass ... Cannot read properties of undefined`
+
+* **现象**：登录时报错。
+* **原因**：数据库里的用户数据损坏（可能是在调试期间写入了不完整的 User 记录）。
+* **解法**：需要清空数据库里的 `Users` 表。请使用下面的 **清洗脚本**。
+
+---
+
+## 🧰 调试工具箱 (Tools)
+
+将这些脚本保存为 `.js` 文件，在本地 `node xxx.js` 运行，能帮你快速定位问题。
+
+### 工具 1：数据库连通性测试 (`debug-mongo.js`)
+
+*用途：排除 Vercel 环境干扰，测试你的账号密码和 URI 是否正确。*
+
+```javascript
+const { MongoClient } = require('mongodb');
+// 填入你的完整连接串
+const uri = "mongodb+srv://user:pass@cluster0.xxx.mongodb.net/waline?retryWrites=true&w=majority";
+
+async function run() {
+    console.log("测试连接中...");
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        console.log("✅ 连接成功！账号密码无误。");
+        const db = client.db("waline");
+        await db.collection('test').insertOne({ date: new Date() });
+        console.log("✅ 写入测试成功！");
+    } catch (e) {
+        console.error("❌ 连接失败:", e.message);
+    } finally { await client.close(); }
+}
+run();
+```
+
+### 工具 2：坏入数据清洗脚本 (`clean-db.js`)
+
+*用途：解决登录报错问题，一键清空所有用户，重置系统。*
+
+```javascript
+const { MongoClient } = require('mongodb');
+const uri = "mongodb+srv://user:pass@cluster0.xxx.mongodb.net/waline?retryWrites=true&w=majority";
+
+async function clean() {
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        const db = client.db("waline");
+        // 删除 Users 集合
+        await db.collection('Users').deleteMany({});
+        console.log("✅ 用户表已清空，请重新注册管理员。");
+    } catch (e) { console.error(e); } 
+    finally { await client.close(); }
+}
+clean();
+```

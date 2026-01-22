@@ -33,33 +33,57 @@ export default defineConfig({
           ]
         },
         {
-          text: 'Web 建站指南',
+          text: '📚 全栈建站指南',
           collapsed: false,
           items: [
-            { text: '用VitePress搭建主体', link: '/notes/web/vitepress-intro' },
-            { text: '实战：从零搭建 VitePress', link: '/notes/web/vitepress-setup-guide' },
-            { text: '实战：发布到 GitHub Pages', link: '/notes/web/github-pages-deploy' },
-            { text: '附：Git 代理设置指南', link: '/notes/web/git-proxy-guide' },
-            { text: '附：GitHub 仓库安全吗？', link: '/notes/web/github-security-guide' },
-            { text: '实战：博客评论系统选型', link: '/notes/web/comment-system-guide' },
-            { text: '实战：接入 Waline 评论系统', link: '/notes/web/waline-setup-guide' },
-            { text: '实战：如何安全地接入AI', link: '/notes/web/ai-api-security.md' },
-            { text: '实战：域名购买与绑定', link: '/notes/web/domain-purchase-guide.md' },
-            { text: '附：Cloudflare Workers 入门', link: '/notes/web/cloudflare-workers-guide' },
-            { text: '进阶：搬家到 Cloudflare Pages', link: '/notes/web/cloudflare-pages-hosting.md' },
-            { text: '更新与部署', link: '/notes/web/static-site-workflow' },
-            { text: '网站的路由与结构', link: '/notes/web/structure-and-routing' },
-            { text: 'UI 定制指南', link: '/notes/web/ui-customization' },
-          ]
-        },
-        {
-          text: 'CMS 内容管理',
-          collapsed: false,
-          items: [
-            { text: '所见即所得 vs 代码驱动', link: '/notes/web/wysiwyg-vs-code' },
-            { text: 'CMS：点击即改的原理与实践', link: '/notes/web/cms-introduction' },
-            { text: '实战：集成 TinaCMS', link: '/notes/web/tinacms-setup' },
-            { text: 'Tina配置详解: config.ts', link: '/notes/web/tinacms-config-guide' },
+            {
+              text: '🌱 基础篇：入门与设计',
+              collapsed: false,
+              items: [
+                { text: '1. VitePress 简介', link: '/notes/web/vitepress-intro' },
+                { text: '2. 快速开始：从零搭建', link: '/notes/web/vitepress-setup-guide' },
+                { text: '3. 核心概念：路由与结构', link: '/notes/web/structure-and-routing' },
+                { text: '4. 外观定制：UI 主题', link: '/notes/web/ui-customization' },
+              ]
+            },
+            {
+              text: '✍️ 内容篇：CMS与管理',
+              collapsed: true,
+              items: [
+                { text: '1. 概念：CMS 原理解析', link: '/notes/web/cms-introduction' },
+                { text: '2. 对比：纯代码 vs 可视化', link: '/notes/web/wysiwyg-vs-code' },
+                { text: '3. 实战：集成 TinaCMS', link: '/notes/web/tinacms-setup' },
+                { text: '4. 进阶：Tina 配置详解', link: '/notes/web/tinacms-config-guide' },
+              ]
+            },
+            {
+              text: '🧩 功能篇：交互与增强',
+              collapsed: true,
+              items: [
+                { text: '1. 评论系统：方案选型', link: '/notes/web/comment-system-guide' },
+                { text: '2. 评论系统：接入 Waline', link: '/notes/web/waline-setup-guide' },
+                { text: '3. AI 对话：后端安全接入', link: '/notes/web/ai-api-security.md' },
+              ]
+            },
+            {
+              text: '🚀 部署篇：上线与运维',
+              collapsed: true,
+              items: [
+                { text: '1. 机制：更新与部署工作流', link: '/notes/web/static-site-workflow' },
+                { text: '2. 实战：发布到 GitHub Pages', link: '/notes/web/github-pages-deploy' },
+                { text: '3. 进阶：域名购买与绑定', link: '/notes/web/domain-purchase-guide.md' },
+                { text: '4. 迁移：搬家到 Cloudflare Pages', link: '/notes/web/cloudflare-pages-hosting.md' },
+                { text: '5. 探索：Cloudflare Workers 入门', link: '/notes/web/cloudflare-workers-guide' },
+              ]
+            },
+            {
+              text: '🔧 附录：工具与安全',
+              collapsed: true,
+              items: [
+                { text: 'Git 代理设置指南', link: '/notes/web/git-proxy-guide' },
+                { text: 'GitHub 仓库安全分析', link: '/notes/web/github-security-guide' },
+              ]
+            }
           ]
         },
         {
