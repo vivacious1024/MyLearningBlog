@@ -34,6 +34,13 @@ export default defineConfig({
           ]
         },
         {
+          text: 'C++ 学习笔记',
+          collapsed: false,
+          items: [
+            { text: 'STL 全解：数据结构与接口', link: '/notes/cpp/stl_comprehensive' }
+          ]
+        },
+        {
           text: '📚 全栈建站指南',
           collapsed: false,
           items: [

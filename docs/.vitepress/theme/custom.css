@@ -71,7 +71,7 @@
 
 /* Global Background */
 body {
-  background: url('/furina_bg.png') no-repeat center center fixed;
+  background: url('/anime_bg.png') no-repeat center center fixed;
   background-size: cover;
   background-attachment: fixed;
 }
