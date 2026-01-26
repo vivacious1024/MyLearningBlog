@@ -37,11 +37,40 @@
 | `clear()` | 清空所有元素 | $O(N)$ |
 | `emplace_back(...)` | 原地构造元素（避免拷贝） | 均摊 $O(1)$ |
 
+**元素查找：**
+
+`vector` **不提供**类似 `map` 或 `set` 的 `find()` 成员函数。需要在 `<algorithm>` 头文件中使用 `std::find()` 全局函数。
+
+- **调用方式**：`std::find(v.begin(), v.end(), val)`
+- **返回值**：找到则返回指向该元素的迭代器；未找到则返回 `v.end()`。
+- **复杂度**：$O(N)$ 线性查找。
+
+
+**遍历方式：**
+
+1. **范围 `for` 循环 (C++11 推荐)**：简洁直观。
+   ```cpp
+   for (const auto& val : v) cout << val << " ";
+   ```
+2. **迭代器遍历**：通用性强。
+   ```cpp
+   for (auto it = v.begin(); it != v.end(); ++it) {
+       cout << *it << " ";
+   }
+   ```
+3. **下标遍历**：类似原生数组。
+   ```cpp
+   for (size_t i = 0; i < v.size(); ++i) {
+       cout << v[i] << " ";
+   }
+   ```
+
 **代码示例：**
 
 ```cpp
 #include <iostream>
 #include <vector>
+#include <algorithm> // 需包含此头文件
 
 using namespace std;
 
@@ -56,6 +85,14 @@ int main() {
     // 插入元素
     v.insert(v.begin() + 1, 15); // 10, 15, 20, 30
     
+    // 查找元素
+    auto it = find(v.begin(), v.end(), 20);
+    if (it != v.end()) {
+        cout << "Found: " << *it << endl;
+    } else {
+        cout << "Not found" << endl;
+    }
+
     // 访问
     cout << "Size: " << v.size() << endl; // 4
     cout << "Front: " << v.front() << ", Back: " << v.back() << endl; // 10, 30
