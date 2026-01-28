@@ -30,7 +30,8 @@ export default defineConfig({
           items: [
             { text: '260108：最大方阵和', link: '/notes/algorithm/260108-maximum-matrix-sum' },
             { text: '260120：构造最小位运算数组', link: '/notes/algorithm/260120-Constructing_a_Bitwise_Operation_Array' },
-            { text: '260123：移除最小数对使数组有序', link: '/notes/algorithm/260123' }
+            { text: '260123：移除最小数对使数组有序', link: '/notes/algorithm/260123' },
+            { text: '260128：带传送的最小路径成本', link: '/notes/algorithm/260128' }
           ]
         },
         {

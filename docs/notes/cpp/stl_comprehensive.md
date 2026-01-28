@@ -1,4 +1,4 @@
-# C++ 核心知识点：标准模板库 (STL) 全解
+	# C++ 核心知识点：标准模板库 (STL) 全解
 
 本文档详细总结了 C++ 中最重要的数据结构（STL 容器）及其常用接口。
 
@@ -493,9 +493,49 @@ int main() {
 
 ### `std::pair`
 
-简单的二元组。
-- 访问：`p.first`, `p.second`
-- 构造：`make_pair(a, b)` 或 `{a, b}`
+`std::pair` 是一个将两个数据组合成一个单一单元的结构体。常用于返回两个值或在 `map` 等容器中存储键值对。定义在 `<utility>` 头文件中。
+
+- **定义**：`pair<T1, T2> p;`
+- **访问**：通过成员变量 `first` 和 `second` 访问。
+- **特性**：支持比较运算（先比 `first`，若相等再比 `second`），因此可直接作为 `map` 的 Key 或用于排序。
+
+**常用操作：**
+
+| 操作 | 描述 |
+| :--- | :--- |
+| `make_pair(a, b)` | 创建 pair，自动推导类型 |
+| `{a, b}` | 列表初始化 (C++11) |
+| `p.first`, `p.second` | 访问第一个/第二个元素 |
+| `==`, `!=`, `<`, `>` | 字典序比较 |
+
+**代码示例：**
+
+```cpp
+#include <utility>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    // 1. 构造
+    pair<int, string> p1(1, "apple");
+    pair<int, string> p2 = {2, "banana"}; // C++11
+    auto p3 = make_pair(3, "cherry");     // 自动推导类型
+
+    // 2. 访问
+    cout << p1.first << ": " << p1.second << endl;
+
+    // 3. 比较 (字典序)
+    if (p1 < p2) cout << "p1 is smaller than p2" << endl; // True, because 1 < 2
+
+    // 4. 用途: 作为 vector 元素并排序
+    vector<pair<int, int>> v = {{3, 10}, {1, 20}, {2, 15}};
+    sort(v.begin(), v.end()); // 默认按 first 排序: {1,20}, {2,15}, {3,10}
+    
+    return 0;
+}
+```
 
 ### `std::tuple` (C++11)
 
@@ -511,6 +551,53 @@ int main() {
 - `test(i)`: 检查第 i 位
 - `count()`: 统计 1 的个数
 - `to_string()`, `to_ulong()`
+
+### 数值极限 (Numeric Limits)
+
+常用来初始化最小值/最大值变量，以便在遍历时更新。
+
+**两种主要方式：**
+
+1.  **C 风格宏** (需 `<climits>`): `INT_MAX`, `INT_MIN`, `LLONG_MAX`
+2.  **C++ 模板类** (需 `<limits>`): `std::numeric_limits<T>::max()`, `std::numeric_limits<T>::lowest()`
+
+**常用数值：**
+
+| 类型 | 最大值宏 | C++ 写法 | 近似值 |
+| :--- | :--- | :--- | :--- |
+| `int` | `INT_MAX` | `numeric_limits<int>::max()` | $2 \times 10^9$ |
+| `int` | `INT_MIN` | `numeric_limits<int>::lowest()` | $-2 \times 10^9$ |
+| `long long` | `LLONG_MAX` | `numeric_limits<long long>::max()` | $9 \times 10^{18}$ |
+| `double` | `DBL_MAX` | `numeric_limits<double>::max()` | $1.79 \times 10^{308}$ |
+
+**代码示例：**
+
+```cpp
+#include <iostream>
+#include <climits> // for INT_MAX
+#include <limits>  // for numeric_limits
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    // 经典用法：找最小值，初始化为最大可能值
+    int min_val = INT_MAX; 
+    
+    vector<int> nums = {10, 5, 8, 3, 12};
+    for(int x : nums) {
+        min_val = min(min_val, x);
+    }
+    cout << "Min: " << min_val << endl; // 3
+
+    // C++ 风格用法
+    long long max_ll = numeric_limits<long long>::max();
+    cout << "Max Long Long: " << max_ll << endl;
+    
+    return 0;
+}
+```
 
 ---
 **总结：**
