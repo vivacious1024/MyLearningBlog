@@ -17,6 +17,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '笔记', link: '/notes/web/vitepress-intro' },
+      { text: '其他网址', link: '/notes/websites' },
       { text: '随想', link: '/notes/thoughts/' },
       { text: '进入编辑模式', link: '/admin/index.html', target: '_blank' }
     ],
@@ -25,7 +26,7 @@ export default defineConfig({
       // 统一的【学习笔记】侧边栏
       '/notes/': [
         {
-          text: '算法',
+          text: '🧮 算法',
           collapsed: false,
           items: [
             { text: '260108：最大方阵和', link: '/notes/algorithm/260108-maximum-matrix-sum' },
@@ -35,7 +36,7 @@ export default defineConfig({
           ]
         },
         {
-          text: 'C++ 学习笔记',
+          text: '💻 C++ 学习笔记',
           collapsed: false,
           items: [
             { text: 'STL 全解：数据结构与接口', link: '/notes/cpp/stl_comprehensive' }
@@ -96,55 +97,60 @@ export default defineConfig({
           ]
         },
         {
-          text: 'Python 学习笔记',
+          text: '🐍 Python 学习笔记',
           collapsed: false,
           items: [
-            { text: '基础语法', link: '/notes/python/basics' },
-            { text: '面向对象', link: '/notes/python/oop' }
+            { text: '1. 基础语法', link: '/notes/python/basics' },
+            { text: '2. 面向对象', link: '/notes/python/oop' }
           ]
         },
         {
-          text: 'LLM 学习笔记',
+          text: '🤖 LLM 学习笔记',
           collapsed: false,
           items: [
-            { text: 'HappyLLM打卡1：NLP的基本概念', link: '/notes/llm/happy1.md' },
-            { text: 'HappyLLM打卡2：注意力机制', link: '/notes/llm/happy2.md' },
-            { text: 'HappyLLM打卡3：编码器与解码器', link: '/notes/llm/happy3.md' }
+            { text: '1. HappyLLM打卡1：NLP的基本概念', link: '/notes/llm/happy1.md' },
+            { text: '2. HappyLLM打卡2：注意力机制', link: '/notes/llm/happy2.md' },
+            { text: '3. HappyLLM打卡3：编码器与解码器', link: '/notes/llm/happy3.md' },
+            { text: '4. LangChain 学习笔记', link: '/notes/llm/langchain-intro.md' }
           ]
         },
         {
-          text: '金融与量化交易',
+          text: '📈 金融与量化交易',
           collapsed: false,
           items: [
-            { text: '金融市场基础', link: '/notes/quant/finance-basics' },
-            { text: '量化交易入门', link: '/notes/quant/quantitative-trading' },
-            { text: '高频交易详解', link: '/notes/quant/high-frequency-trading' }
+            { text: '1. 金融市场基础', link: '/notes/quant/01.finance-basics' },
+            { text: '2. 量化交易入门', link: '/notes/quant/02.quantitative-trading' },
+            { text: '3. 高频交易详解', link: '/notes/quant/03.high-frequency-trading' },
+            { text: '4. 技术指标：MACD与RSI', link: '/notes/quant/04.technical-indicators' },
+            { text: '5. 量化交易模型发展1', link: '/notes/quant/05.quant-models' },
+            { text: '6. 量化交易模型发展2', link: '/notes/quant/06.fin-llm' },
+            { text: '7. 量化交易模型发展3', link: '/notes/quant/07.multi-agent-trading' }
           ]
         },
         {
-          text: '小笔记',
+          text: '📝 小笔记',
           collapsed: false,
           items: [
-            { text: '“抽象”与“接口”', link: '/notes/tips/abstract-and-interfaces' },
-            { text: 'Android结合数据库', link: '/notes/tips/android-database-binding' },
-            { text: 'gemini每次更新设置代理端口', link: '/notes/tips/gemini-proxy-settings' },
-            { text: 'java自带打包指令', link: '/notes/tips/java-packaging-command' },
-            { text: 'linux', link: '/notes/tips/linux-commands' },
-            { text: 'markdown常用语法', link: '/notes/tips/markdown-syntax' },
-            { text: 'npm install', link: '/notes/tips/npm-install' },
-            { text: 'vi编辑器', link: '/notes/tips/vi-editor' },
-            { text: 'word快捷键', link: '/notes/tips/word-shortcuts' },
-            { text: 'ollama', link: '/notes/tips/ollama-guide' },
-            { text: '应用缓存', link: '/notes/tips/app-cache' },
-            { text: '学习妙妙小工具', link: '/notes/tips/academic-tools' },
-            { text: '安装deb文件', link: '/notes/tips/install-deb-file' },
-            { text: '手机快捷键', link: '/notes/tips/mobile-shortcuts' },
-            { text: '输入文本框的使用', link: '/notes/tips/input-textbox-usage' },
-            { text: '电脑快捷键', link: '/notes/tips/computer-shortcuts' },
+            { text: '1. “抽象”与“接口”', link: '/notes/tips/abstract-and-interfaces' },
+            { text: '2. Android结合数据库', link: '/notes/tips/android-database-binding' },
+            { text: '3. gemini每次更新设置代理端口', link: '/notes/tips/gemini-proxy-settings' },
+            { text: '4. java自带打包指令', link: '/notes/tips/java-packaging-command' },
+            { text: '5. linux', link: '/notes/tips/linux-commands' },
+            { text: '6. markdown常用语法', link: '/notes/tips/markdown-syntax' },
+            { text: '7. npm install', link: '/notes/tips/npm-install' },
+            { text: '8. vi编辑器', link: '/notes/tips/vi-editor' },
+            { text: '9. word快捷键', link: '/notes/tips/word-shortcuts' },
+            { text: '10. ollama', link: '/notes/tips/ollama-guide' },
+            { text: '11. 应用缓存', link: '/notes/tips/app-cache' },
+            { text: '12. 学习妙妙小工具', link: '/notes/tips/academic-tools' },
+            { text: '13. 安装deb文件', link: '/notes/tips/install-deb-file' },
+            { text: '14. 手机快捷键', link: '/notes/tips/mobile-shortcuts' },
+            { text: '15. 输入文本框的使用', link: '/notes/tips/input-textbox-usage' },
+            { text: '16. 电脑快捷键', link: '/notes/tips/computer-shortcuts' },
           ]
         },
         {
-          text: '关于',
+          text: 'ℹ️ 关于',
           collapsed: true,
           items: [
             { text: '关于本站', link: '/notes/introduction' },
